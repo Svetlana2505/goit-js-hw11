@@ -7,8 +7,8 @@ const form = document.querySelector('.search-form');
 const gallery = document.querySelector('.gallery');
 const loadMore = document.querySelector('.load-more');
 
-gallery.addEventListener('click', e => {
-  e.preventDefault();
+gallery.addEventListener('click', event => {
+  event.preventDefault();
 });
 
 const newsApiService = new NewsApiService();
