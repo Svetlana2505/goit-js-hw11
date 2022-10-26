@@ -21,7 +21,7 @@ function onSubmitForm(event) {
   event.preventDefault();
   gallery.innerHTML = '';
 
-  newsApiService.query = event.currentTarget.elements.searchQuery.value;
+  newsApiService.query = event.currentTarget.elements.searchQuery.value.trim();
   if (newsApiService.query === '') {
     return;
   }
