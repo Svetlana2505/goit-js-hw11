@@ -1,5 +1,5 @@
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-import NewsApiService from './news-service';
+import ImagesApiService from './news-service';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
@@ -11,27 +11,41 @@ gallery.addEventListener('click', event => {
   event.preventDefault();
 });
 
-const newsApiService = new NewsApiService();
+const imagesApiService = new ImagesApiService();
 const lightbox = new SimpleLightbox('.gallery a');
 
 form.addEventListener('submit', onSubmitForm);
 loadMore.addEventListener('click', onLoadMore);
 
-function onSubmitForm(event) {
+async function onSubmitForm(event) {
   event.preventDefault();
   gallery.innerHTML = '';
+  loadMore.classList.add('is-hidden');
 
-  newsApiService.query = event.currentTarget.elements.searchQuery.value.trim();
-  if (newsApiService.query === '') {
+  imagesApiService.query =
+    event.currentTarget.elements.searchQuery.value.trim();
+  if (imagesApiService.query === '') {
     return;
   }
+
   event.currentTarget.elements.searchQuery.value = '';
-  newsApiService.resetPage();
-  newsApiService.fetchImages().then(renderForm);
+  imagesApiService.resetPage();
+
+  try {
+    const response = await imagesApiService.fetchImages();
+    renderForm(response);
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-function onLoadMore() {
-  newsApiService.fetchImages().then(scrollPage);
+async function onLoadMore() {
+  try {
+    const response = await imagesApiService.fetchImages();
+    scrollPage(response);
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 function scrollPage(response) {
@@ -49,6 +63,7 @@ function renderForm({ data: { hits, totalHits } }) {
     Notify.failure(
       'Sorry, there are no images matching your search query. Please try again.'
     );
+
     return;
   }
 

@@ -3,7 +3,7 @@ import axios from 'axios';
 const BASE_URL = 'https://pixabay.com/api/';
 const API = '30679800-1fd8a93b87369129f70e2b6b6';
 
-export default class NewsApiService {
+export default class ImagesApiService {
   constructor() {
     this.searchQuery = '';
     this.page = 1;
